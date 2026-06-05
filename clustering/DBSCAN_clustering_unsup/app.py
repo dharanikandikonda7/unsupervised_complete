@@ -25,13 +25,25 @@ st.title("📊 DBSCAN Customer Segmentation Dashboard")
 # LOAD DATA
 # ---------------------------------------------------
 
+# ---------------------------------------------------
+# PATHS
+# ---------------------------------------------------
+
+BASE_DIR = Path(__file__).resolve().parent
+
+DATA_PATH = BASE_DIR / "data" / "marketing_campaign.csv"
+
+# Uncomment for debugging if needed
+# st.write("BASE_DIR:", BASE_DIR)
+# st.write("DATA_PATH:", DATA_PATH)
+# st.write("Dataset Exists:", DATA_PATH.exists())
 @st.cache_data
 def load_data():
     return pd.read_csv(
-        "data/marketing_campaign.csv",
+        DATA_PATH,
         sep="\t"
     )
-
+    
 df = load_data()
 
 # ---------------------------------------------------

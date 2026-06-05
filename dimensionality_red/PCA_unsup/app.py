@@ -12,10 +12,24 @@ from sklearn.decomposition import PCA
 # PAGE CONFIG
 # --------------------------------------------------
 
-st.set_page_config(
-    page_title="PCA Analysis Dashboard",
-    layout="wide"
-)
+# ---------------------------------------------------
+# PATHS
+# ---------------------------------------------------
+
+BASE_DIR = Path(__file__).resolve().parent
+
+DATA_PATH = BASE_DIR / "data" / "marketing_campaign.csv"
+
+# ---------------------------------------------------
+# LOAD DATA
+# ---------------------------------------------------
+
+@st.cache_data
+def load_data():
+    return pd.read_csv(
+        DATA_PATH,
+        sep="\t"
+    )
 
 st.title("📊 Principal Component Analysis (PCA) Dashboard")
 
