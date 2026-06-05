@@ -1,51 +1,74 @@
-import pandas as pd 
-import numpy as np 
+import streamlit as st
+import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 import joblib
-import streamlit as st 
+from pathlib import Path
 
+# --------------------------------------------------
+# PAGE CONFIG
+# --------------------------------------------------
 
 st.set_page_config(
-    page_title="Customer Segmentation ",
+    page_title="Customer Segmentation",
     layout="wide"
 )
 
-st.title(
-    "Customer Segmentation using k-means"
-)
+# --------------------------------------------------
+# PATHS
+# --------------------------------------------------
 
-model=joblib.load(
-    "models/kmeans_model.pkl"
-)
+BASE_DIR = Path(__file__).resolve().parent
 
-scaler=joblib.load(
-    "models/scaler.pkl"
-)
+MODEL_PATH = BASE_DIR / "models" / "kmeans_model.pkl"
+SCALER_PATH = BASE_DIR / "models" / "scaler.pkl"
+DATA_PATH = BASE_DIR / "data" / "marketing_campaign.csv"
+IMAGE_PATH = BASE_DIR / "images" / "cluster_plot.png"
+
+# --------------------------------------------------
+# LOAD MODEL & SCALER
+# --------------------------------------------------
+
+model = joblib.load(MODEL_PATH)
+scaler = joblib.load(SCALER_PATH)
+
+# --------------------------------------------------
+# TITLE
+# --------------------------------------------------
+
+st.title("📊 Customer Segmentation using K-Means")
+
+# --------------------------------------------------
+# LOAD DATA
+# --------------------------------------------------
 
 df = pd.read_csv(
-    "data/marketing_campaign.csv",
+    DATA_PATH,
     sep="\t"
 )
-st.subheader(
-    "Dataset Preview"
-)
 
-st.dataframe(
-    df.head()
-)
+st.subheader("Dataset Preview")
 
-st.image(
-    "images/cluster_plot.png"
-)
+st.dataframe(df.head())
 
-st.subheader(
-    "Predict Customer Cluster"
-)
+# --------------------------------------------------
+# CLUSTER IMAGE
+# --------------------------------------------------
 
-income=st.number_input(
+if IMAGE_PATH.exists():
+    st.image(IMAGE_PATH)
+
+# --------------------------------------------------
+# PREDICTION SECTION
+# --------------------------------------------------
+
+st.subheader("Predict Customer Cluster")
+
+income = st.number_input(
     "Income",
     value=50000
 )
+
 kidhome = st.number_input(
     "Kidhome",
     value=0
@@ -88,29 +111,34 @@ sweet = st.number_input(
 
 gold = st.number_input(
     "Gold Spending",
-    value=30)
+    value=30
+)
 
-if st.button(
-    "Predict Cluster"
-):
-    sample=np.array([[
-        income,
-        kidhome,
-        teenhome,
-        recency,
-        wines,
-        fruits,
-        meat,
-        fish,
-        sweet,
-        gold
-    ]])
-    sample_scaled=scaler.transform(
-        sample
-    )
-    cluster=model.predict(
-        sample_scaled
-    )
+# --------------------------------------------------
+# PREDICT
+# --------------------------------------------------
+
+if st.button("Predict Cluster"):
+
+    sample = np.array([
+        [
+            income,
+            kidhome,
+            teenhome,
+            recency,
+            wines,
+            fruits,
+            meat,
+            fish,
+            sweet,
+            gold
+        ]
+    ])
+
+    sample_scaled = scaler.transform(sample)
+
+    cluster = model.predict(sample_scaled)
+
     st.success(
         f"Customer belongs to Cluster {cluster[0]}"
     )
