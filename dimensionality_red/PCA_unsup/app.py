@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.express as px
-
+import pathlib as path
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.decomposition import PCA
 
@@ -23,10 +23,14 @@ st.title("📊 Principal Component Analysis (PCA) Dashboard")
 # LOAD DATA
 # --------------------------------------------------
 
+BASE_DIR = Path(__file__).resolve().parent
+
+DATA_PATH = BASE_DIR / "data" / "marketing_campaign.csv"
+
 @st.cache_data
 def load_data():
     return pd.read_csv(
-        "data/marketing_campaign.csv",
+        DATA_PATH,
         sep="\t"
     )
 

@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+from pathlib import Path
 
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import StandardScaler
@@ -28,10 +29,16 @@ st.title("📊 Customer Segmentation using Hierarchical Clustering")
 # LOAD DATA
 # ----------------------------------------------------
 
+BASE_DIR = Path(__file__).resolve().parent
+
+DATA_PATH = BASE_DIR / "data" / "marketing_campaign.csv"
+
 @st.cache_data
 def load_data():
-    df = pd.read_csv("data/marketing_campaign.csv", sep="\t")
-    return df
+    return pd.read_csv(
+        DATA_PATH,
+        sep="\t"
+    )
 
 df = load_data()
 
