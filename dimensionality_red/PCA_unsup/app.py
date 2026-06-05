@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.express as px
-import pathlib as path
+from pathlib import Path
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.decomposition import PCA
 
